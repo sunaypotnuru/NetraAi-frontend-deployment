@@ -4,7 +4,7 @@ import { HowItWorks } from "@/components/layout/HowItWorks";
 import { AboutSection } from "@/components/layout/AboutSection";
 import { ContactSection } from "@/components/layout/ContactSection";
 import { ReviewSection } from "@/components/layout/ReviewSection";
-import { Eye, Video, Globe, Stethoscope, Calendar, Shield, MapPin, FileText, MessageCircle, Send, Trophy, Users, PenTool, PhoneCall, Languages } from "lucide-react";
+import { Eye, Video, Globe, Stethoscope, Calendar, Shield, MapPin, FileText, MessageCircle, Send, Trophy, Users, PenTool, PhoneCall, Languages, Activity } from "lucide-react";
 import { useInView } from "motion/react";
 import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
@@ -60,7 +60,7 @@ export default function HomePage() {
       title: t("home.ai_models.dr_title", "Diabetic Retinopathy Detection"), 
       description: t("home.ai_models.dr_desc", "Automated DR screening and severity grading"), 
       accuracy: "95%",
-      status: "training",
+      status: "deployed",
       color: "#3B82F6" 
     },
     { 
@@ -68,7 +68,7 @@ export default function HomePage() {
       title: t("home.ai_models.cataract_title", "Cataract Detection"), 
       description: t("home.ai_models.cataract_desc", "Early cataract identification from eye images"), 
       accuracy: "95%",
-      status: "training",
+      status: "deployed",
       color: "#8B5CF6" 
     },
     { 
@@ -78,6 +78,14 @@ export default function HomePage() {
       accuracy: "85-92%",
       status: "training",
       color: "#EC4899" 
+    },
+    { 
+      icon: Activity, 
+      title: t("home.ai_models.arvr_title", "AR Pose Tracking"), 
+      description: t("home.ai_models.arvr_desc", "Real-time MediaPipe skeletal tracking for physical therapy"), 
+      accuracy: "98%",
+      status: "deployed",
+      color: "#10B981" 
     },
   ];
 
