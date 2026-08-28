@@ -25,11 +25,23 @@ if (import.meta.env.DEV) {
   }).catch(console.error);
 }
 
-// Register Service Worker for PWA
-// import { registerSW } from 'virtual:pwa-register';
-// if ('serviceWorker' in navigator) {
-//   registerSW({ immediate: true });
-// }
+// Global error handler for unhandled promise rejections and CDN resource failures
+window.addEventListener('unhandledrejection', (event) => {
+  console.warn('Unhandled promise rejection (likely CDN/external resource):', event.reason);
+  // Don't prevent default to allow other handlers to run
+});
+
+// Handle resource loading errors (CDN failures, CORS issues)
+window.addEventListener('error', (event) => {
+  if (event.target && event.target !== window) {
+    const target = event.target as HTMLElement;
+    if (target.tagName === 'SCRIPT' || target.tagName === 'LINK' || target.tagName === 'IMG') {
+      console.warn('External resource failed to load:', target.src || target.href);
+      // Don't break the app for external resource failures
+      event.preventDefault();
+    }
+  }
+}, true);
 
 createRoot(document.getElementById("root")!).render(
   <ErrorBoundary>

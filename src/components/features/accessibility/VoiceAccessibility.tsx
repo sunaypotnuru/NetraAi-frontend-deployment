@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "motion/react";
 import { Volume2, VolumeX, Download, X, AlertCircle, Headphones } from "lucide-react";
 import { useTranslation } from "@/lib/i18n";
 import { useAccessibilityStore } from "@/lib/accessibility";
+import { debounce } from 'lodash';
 
 // Map app language codes to BCP-47 language tags for SpeechSynthesis
 const LANG_MAP: Record<string, string> = {
@@ -267,43 +268,55 @@ export function VoiceAccessibility() {
   useEffect(() => {
     if (!enabled) return;
 
-    const handleMouseOver = (e: MouseEvent) => {
-      if (timeoutRef.current !== null) {
-        window.clearTimeout(timeoutRef.current);
-      }
-      
-      timeoutRef.current = window.setTimeout(() => {
-        const target = e.target as Element;
-        if (!target || target === document.body) return;
-
-        // Find nearest readable element
-        let el: Element | null = target;
-        let text = '';
-        let depth = 0;
-        
-        while (el && el !== document.body && depth < 5) {
-          text = getReadableText(el);
-          if (text) break;
-          el = el.parentElement;
-          depth++;
+    // Debounced event handlers to prevent excessive calls
+    const debouncedMouseOver = useCallback(
+      debounce((e: MouseEvent) => {
+        if (timeoutRef.current !== null) {
+          window.clearTimeout(timeoutRef.current);
         }
+        
+        timeoutRef.current = window.setTimeout(() => {
+          const target = e.target as Element;
+          if (!target || target === document.body) return;
 
-        if (text) speak(text);
-      }, 350); // Balanced debounce delay
-    };
+          // Find nearest readable element
+          let el: Element | null = target;
+          let text = '';
+          let depth = 0;
+          
+          while (el && el !== document.body && depth < 5) {
+            text = getReadableText(el);
+            if (text) break;
+            el = el.parentElement;
+            depth++;
+          }
 
-    const handleMouseOut = () => {
-      if (timeoutRef.current !== null) {
-        window.clearTimeout(timeoutRef.current);
-      }
-    };
+          if (text) speak(text);
+        }, 350); // Balanced debounce delay
+      }, 100),
+      [enabled, speak]
+    );
+    
+    const debouncedMouseOut = useCallback(
+      debounce(() => {
+        if (timeoutRef.current !== null) {
+          window.clearTimeout(timeoutRef.current);
+        }
+      }, 100),
+      []
+    );
 
-    document.addEventListener('mouseover', handleMouseOver);
-    document.addEventListener('mouseout', handleMouseOut);
+    if (enabled) {
+      document.addEventListener('mouseover', debouncedMouseOver, { passive: true });
+      document.addEventListener('mouseout', debouncedMouseOut, { passive: true });
+    }
 
     return () => {
-      document.removeEventListener('mouseover', handleMouseOver);
-      document.removeEventListener('mouseout', handleMouseOut);
+      document.removeEventListener('mouseover', debouncedMouseOver);
+      document.removeEventListener('mouseout', debouncedMouseOut);
+      // Cancel any pending debounced calls
+      debouncedMouseOver.cancel();
+      debouncedMouseOut.cancel();
       if (timeoutRef.current !== null) {
         window.clearTimeout(timeoutRef.current);
       }

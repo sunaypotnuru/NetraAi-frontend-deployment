@@ -117,7 +117,9 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({ chi
 
     return () => {
       if (managerRef.current) {
+        console.log('[WebSocketContext] Cleaning up all connections...');
         managerRef.current.disconnectAll();
+        managerRef.current = null;
       }
     };
   }, [user, setStatus, setLastError, addNotification, updateUser, removeUser, setUsers, soundEnabled, desktopEnabled]);

@@ -36,6 +36,9 @@ export const validateEnvironment = () => {
     API_URL: import.meta.env.VITE_API_URL ? '✓' : '✗',
     LIVEKIT_URL: import.meta.env.VITE_LIVEKIT_URL ? '✓' : '✗',
     BYPASS_AUTH: import.meta.env.VITE_BYPASS_AUTH,
+    MODE: import.meta.env.MODE,
+    DEV: import.meta.env.DEV,
+    PROD: import.meta.env.PROD,
   });
 
   return {
@@ -47,11 +50,14 @@ export const validateEnvironment = () => {
 
 // Call this early in app initialization
 export const debugEnvironment = () => {
-  if (import.meta.env.MODE === 'development' || import.meta.env.DEV) {
-    console.log('🔧 Development mode - Full env debug:', import.meta.env);
-  } else {
-    console.log('🚀 Production mode - Limited env info');
-  }
+  console.log('🔧 Environment Debug Info:', {
+    mode: import.meta.env.MODE,
+    dev: import.meta.env.DEV,
+    prod: import.meta.env.PROD,
+    baseURL: import.meta.env.BASE_URL,
+    origin: typeof window !== 'undefined' ? window.location.origin : 'unknown',
+    userAgent: typeof navigator !== 'undefined' ? navigator.userAgent.substring(0, 50) + '...' : 'unknown'
+  });
   
   return validateEnvironment();
 };
