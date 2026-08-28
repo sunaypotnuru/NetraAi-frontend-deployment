@@ -1,4 +1,5 @@
-import { useState, useEffect, useRef } from "react";
+import React from 'react';
+
 import { Link, useLocation, useNavigate } from "react-router";
 import { motion, AnimatePresence } from "motion/react";
 import {
@@ -54,19 +55,19 @@ const doctorExtraNav = [
 ];
 
 export default function NavbarMain() {
-  const [scrolled, setScrolled] = useState(false);
-  const [mobileOpen, setMobileOpen] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [langOpen, setLangOpen] = useState(false);
-  const menuRef = useRef<HTMLDivElement>(null);
-  const langRef = useRef<HTMLDivElement>(null);
+  const [scrolled, setScrolled] = React.useState(false);
+  const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [menuOpen, setMenuOpen] = React.useState(false);
+  const [langOpen, setLangOpen] = React.useState(false);
+  const menuRef = React.useRef<HTMLDivElement>(null);
+  const langRef = React.useRef<HTMLDivElement>(null);
   const location = useLocation();
   const navigate = useNavigate();
   const { user, signOut } = useAuthStore();
   const { t, language, setLanguage } = useTranslation();
 
   // Close dropdowns on outside click
-  useEffect(() => {
+  React.useEffect(() => {
     const handler = (e: Event) => {
       const target = e.target as Node;
       if (menuRef.current && !menuRef.current.contains(target)) setMenuOpen(false);
@@ -76,13 +77,13 @@ export default function NavbarMain() {
     return () => document.removeEventListener('mousedown', handler);
   }, []);
 
-  useEffect(() => {
+  React.useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  useEffect(() => {
+  React.useEffect(() => {
     setMobileOpen(false);
   }, [location.pathname]);
 

@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState, useCallback } from "react";
+import React from 'react';
+
 import { motion, AnimatePresence } from "motion/react";
 import { Volume2, VolumeX, Download, X, AlertCircle, Headphones } from "lucide-react";
 import { useTranslation } from "@/lib/i18n";
@@ -105,18 +106,18 @@ const detectOS = (): string => {
 export function VoiceAccessibility() {
   const { language, t } = useTranslation();
   const { voiceReader: enabled, toggleVoiceReader: setEnabled } = useAccessibilityStore();
-  const [speaking, setSpeaking] = useState(false);
-  const [showTooltip, setShowTooltip] = useState(false);
-  const [showDownloadAlert, setShowDownloadAlert] = useState(false);
-  const [missingVoiceLang, setMissingVoiceLang] = useState<string | null>(null);
+  const [speaking, setSpeaking] = React.useState(false);
+  const [showTooltip, setShowTooltip] = React.useState(false);
+  const [showDownloadAlert, setShowDownloadAlert] = React.useState(false);
+  const [missingVoiceLang, setMissingVoiceLang] = React.useState<string | null>(null);
   
   // Ref to track the current utterance to prevent garbage collection
-  const currentUtteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
-  const lastSpokenRef = useRef('');
-  const timeoutRef = useRef<number | null>(null);
+  const currentUtteranceRef = React.useRef<SpeechSynthesisUtterance | null>(null);
+  const lastSpokenRef = React.useRef('');
+  const timeoutRef = React.useRef<number | null>(null);
 
   // Initialize voices
-  useEffect(() => {
+  React.useEffect(() => {
     if (typeof window === 'undefined' || !window.speechSynthesis) return;
 
     const loadVoices = () => {
@@ -152,7 +153,7 @@ export function VoiceAccessibility() {
     };
   }, [language]);
 
-  const stopSpeaking = useCallback(() => {
+  const stopSpeaking = React.useCallback(() => {
     if (typeof window !== 'undefined' && window.speechSynthesis) {
       window.speechSynthesis.cancel();
       setSpeaking(false);
@@ -160,7 +161,7 @@ export function VoiceAccessibility() {
     }
   }, []);
 
-  const speak = useCallback((text: string, isManualTrigger = false) => {
+  const speak = React.useCallback((text: string, isManualTrigger = false) => {
     if (!text || (!isManualTrigger && text === lastSpokenRef.current)) return;
     if (typeof window === 'undefined' || !window.speechSynthesis) return;
 
@@ -248,7 +249,7 @@ export function VoiceAccessibility() {
   };
 
   // Handle language changes
-  useEffect(() => {
+  React.useEffect(() => {
     lastSpokenRef.current = '';
     stopSpeaking();
 
@@ -265,11 +266,11 @@ export function VoiceAccessibility() {
   }, [language, enabled, stopSpeaking]);
 
   // Handle hover events
-  useEffect(() => {
+  React.useEffect(() => {
     if (!enabled) return;
 
     // Debounced event handlers to prevent excessive calls
-    const debouncedMouseOver = useCallback(
+    const debouncedMouseOver = React.useCallback(
       debounce((e: MouseEvent) => {
         if (timeoutRef.current !== null) {
           window.clearTimeout(timeoutRef.current);
@@ -297,7 +298,7 @@ export function VoiceAccessibility() {
       [enabled, speak]
     );
     
-    const debouncedMouseOut = useCallback(
+    const debouncedMouseOut = React.useCallback(
       debounce(() => {
         if (timeoutRef.current !== null) {
           window.clearTimeout(timeoutRef.current);

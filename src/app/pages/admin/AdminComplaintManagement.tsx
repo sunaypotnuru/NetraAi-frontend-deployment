@@ -1,7 +1,8 @@
+import React from 'react';
 import { motion, AnimatePresence } from "motion/react";
 import { MessageSquare, Clock, CheckCircle, AlertCircle, Search, Filter, Shield, MoreVertical, ExternalLink } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
-import { useState } from "react";
+
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { complianceAPI } from "@/lib/api";
 import { toast } from "sonner";
@@ -23,7 +24,7 @@ const statusColors: Record<string, string> = {
 };
 
 export default function AdminComplaintManagement() {
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = React.useState("");
   const queryClient = useQueryClient();
 
   const { data: complaints = [], isLoading } = useQuery({
