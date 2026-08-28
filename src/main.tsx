@@ -7,6 +7,11 @@ import "./styles/index.css";
 import { AuthProvider } from "@/app/contexts/AuthContext";
 import "./lib/i18n";
 import * as Sentry from "@sentry/react";
+import { ErrorBoundary } from "./components/ErrorBoundary";
+import { debugEnvironment } from "./utils/envValidator";
+
+// Validate environment variables on startup
+debugEnvironment();
 
 Sentry.init({
   dsn: import.meta.env.VITE_SENTRY_DSN || "https://dummy@o0.ingest.sentry.io/0",
@@ -27,12 +32,14 @@ if (import.meta.env.DEV) {
 // }
 
 createRoot(document.getElementById("root")!).render(
-  <Sentry.ErrorBoundary fallback={<div className="p-4 text-red-500">A fatal application error occurred. Sentry has been notified.</div>}>
-    <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <App />
-      </AuthProvider>
-    </QueryClientProvider>
-  </Sentry.ErrorBoundary>
+  <ErrorBoundary>
+    <Sentry.ErrorBoundary fallback={<div className="p-4 text-red-500">A fatal application error occurred. Sentry has been notified.</div>}>
+      <QueryClientProvider client={queryClient}>
+        <AuthProvider>
+          <App />
+        </AuthProvider>
+      </QueryClientProvider>
+    </Sentry.ErrorBoundary>
+  </ErrorBoundary>
 );
 
