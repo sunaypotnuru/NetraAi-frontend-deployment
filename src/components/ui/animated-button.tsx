@@ -12,8 +12,8 @@
  * - Respects reduced motion preferences
  */
 
+import React from 'react';
 import { motion } from 'motion/react';
-import { forwardRef, useState } from 'react';
 import { Button, buttonVariants } from './button';
 import { type VariantProps } from 'class-variance-authority';
 import { useAnimationConfig } from '@/animations';
@@ -46,7 +46,7 @@ interface Ripple {
   size: number;
 }
 
-export const AnimatedButton = forwardRef<HTMLButtonElement, AnimatedButtonProps>(
+export const AnimatedButton = React.forwardRef<HTMLButtonElement, AnimatedButtonProps>(
   (
     {
       children,
