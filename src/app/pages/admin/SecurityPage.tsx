@@ -46,8 +46,6 @@ interface SecurityStats {
   last_audit_date: string;
 }
 
-
-
 export default function SecurityPage() {
   const { t } = useTranslation();
   const [loading, setLoading] = React.useState(false);

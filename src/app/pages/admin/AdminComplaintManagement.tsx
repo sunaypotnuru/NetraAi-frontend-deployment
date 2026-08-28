@@ -145,7 +145,6 @@ export default function AdminComplaintManagement() {
           </Card>
         </div>
 
-
         {/* Complaints Table Matrix */}
         <Card className="bg-card border-border shadow-xl overflow-hidden rounded-3xl">
           <CardContent className="p-0">

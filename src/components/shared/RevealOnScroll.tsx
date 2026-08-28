@@ -1,6 +1,5 @@
 import React from 'react';
 
-
 interface RevealOnScrollProps {
   children: ReactNode;
   className?: string;

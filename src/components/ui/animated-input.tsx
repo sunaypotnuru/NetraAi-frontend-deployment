@@ -58,7 +58,7 @@ export const AnimatedInput = React.forwardRef<HTMLInputElement, AnimatedInputPro
   ) => {
     const { shouldReduceMotion, getTransition } = useAnimationConfig();
     const [isFocused, setIsFocused] = React.useState(false);
-    const [hasValue, setHasValue] = useState(false);
+    const [hasValue, setHasValue] = React.useState(false);
 
     const shouldAnimate = !disableAnimations && !shouldReduceMotion;
     const inputId = id || `input-${Math.random().toString(36).substr(2, 9)}`;

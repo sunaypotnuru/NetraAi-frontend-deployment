@@ -15,7 +15,6 @@ import { ThemeToggle } from "@/components/shared/ThemeToggle";
 import { NotificationCenter } from "@/components/features/notifications/NotificationCenter";
 import { ConnectionStatus } from "@/components/shared/ConnectionStatus";
 
-
 const patientNav = [
   { label: "Models", path: "/patient/models", icon: Eye },
   { label: "AR Exercises", path: "/patient/exercises", icon: Dumbbell },

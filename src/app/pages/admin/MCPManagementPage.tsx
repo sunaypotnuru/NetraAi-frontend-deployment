@@ -42,7 +42,6 @@ import { AnalyticsDashboard } from "@/components/features/analytics/AnalyticsDas
 import { LiveAuditLog } from "@/components/features/domain/LiveAuditLog";
 import { logger } from "@/lib/logger";
 
-
 interface MCPTool {
   name: string;
   status: "healthy" | "error" | "loading";
@@ -126,7 +125,6 @@ export default function MCPManagementPage() {
     retry: 2,
     refetchInterval: 30000,
   });
-
 
   // Enhanced MCP tools with real implementation status
   const [tools, setTools] = React.useState<MCPTool[]>([]);

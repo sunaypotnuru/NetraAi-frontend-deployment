@@ -12,7 +12,7 @@
  * - Respects reduced motion preferences
  */
 
-import React, { useState } from "react";
+import React from 'react';
 import { motion } from "motion/react";
 import { Button, buttonVariants } from "./button";
 import { type VariantProps } from "class-variance-authority";
@@ -70,7 +70,7 @@ export const AnimatedButton = React.forwardRef<
     const { shouldReduceMotion, getTransition } = useAnimationConfig();
 
     // Store active ripple effects
-    const [ripples, setRipples] = useState<Ripple[]>([]);
+    const [ripples, setRipples] = React.useState<Ripple[]>([]);
 
     // Button is disabled while loading or explicitly disabled
     const isDisabled = disabled || loading;
