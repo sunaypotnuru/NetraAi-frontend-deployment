@@ -269,43 +269,37 @@ export function VoiceAccessibility() {
   React.useEffect(() => {
     if (!enabled) return;
 
-    // Debounced event handlers to prevent excessive calls
-    const debouncedMouseOver = React.useCallback(
-      debounce((e: MouseEvent) => {
-        if (timeoutRef.current !== null) {
-          window.clearTimeout(timeoutRef.current);
-        }
+    // Debounced event handlers to prevent excessive calls (plain functions inside effect, no illegal hooks)
+    const debouncedMouseOver = debounce((e: MouseEvent) => {
+      if (timeoutRef.current !== null) {
+        window.clearTimeout(timeoutRef.current);
+      }
+      
+      timeoutRef.current = window.setTimeout(() => {
+        const target = e.target as Element;
+        if (!target || target === document.body) return;
+
+        // Find nearest readable element
+        let el: Element | null = target;
+        let text = '';
+        let depth = 0;
         
-        timeoutRef.current = window.setTimeout(() => {
-          const target = e.target as Element;
-          if (!target || target === document.body) return;
-
-          // Find nearest readable element
-          let el: Element | null = target;
-          let text = '';
-          let depth = 0;
-          
-          while (el && el !== document.body && depth < 5) {
-            text = getReadableText(el);
-            if (text) break;
-            el = el.parentElement;
-            depth++;
-          }
-
-          if (text) speak(text);
-        }, 350); // Balanced debounce delay
-      }, 100),
-      [enabled, speak]
-    );
-    
-    const debouncedMouseOut = React.useCallback(
-      debounce(() => {
-        if (timeoutRef.current !== null) {
-          window.clearTimeout(timeoutRef.current);
+        while (el && el !== document.body && depth < 5) {
+          text = getReadableText(el);
+          if (text) break;
+          el = el.parentElement;
+          depth++;
         }
-      }, 100),
-      []
-    );
+
+        if (text) speak(text);
+      }, 350); // Balanced debounce delay
+    }, 100);
+    
+    const debouncedMouseOut = debounce(() => {
+      if (timeoutRef.current !== null) {
+        window.clearTimeout(timeoutRef.current);
+      }
+    }, 100);
 
     if (enabled) {
       document.addEventListener('mouseover', debouncedMouseOver, { passive: true });
