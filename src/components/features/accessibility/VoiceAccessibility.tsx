@@ -441,29 +441,13 @@ export function VoiceAccessibility() {
               className="bg-white/90 dark:bg-gray-900/90 backdrop-blur-xl border border-gray-100 dark:border-gray-800 rounded-2xl px-4 py-2.5 text-xs font-semibold text-gray-600 dark:text-gray-300 shadow-2xl mb-1"
             >
               {enabled 
-                ? t('voice_accessibility.enabled_tooltip', 'Voice Reader Active — Hover to listen')
+                ? t('voice_accessibility.enabled_tooltip', 'Voice Reader Active — Click to mute')
                 : t('voice_accessibility.disabled_tooltip', 'Enable Voice Reader Accessibility')}
             </motion.div>
           )}
         </AnimatePresence>
 
         <div className="flex flex-col gap-2">
-          {/* Stop Button (only when speaking) */}
-          <AnimatePresence>
-            {enabled && speaking && (
-              <motion.button
-                initial={{ opacity: 0, y: 10, scale: 0.8 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: 10, scale: 0.8 }}
-                onClick={stopSpeaking}
-                className="w-10 h-10 rounded-xl bg-red-500 text-white flex items-center justify-center shadow-lg hover:bg-red-600 transition-colors group"
-                title={t('voice_accessibility.stop', 'Stop Speaking')}
-              >
-                <VolumeX className="w-5 h-5 group-hover:scale-110 transition-transform" />
-              </motion.button>
-            )}
-          </AnimatePresence>
-
           {/* Main Toggle Button */}
           <motion.button
             onClick={toggle}
@@ -471,6 +455,7 @@ export function VoiceAccessibility() {
             onMouseLeave={() => setShowTooltip(false)}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
+            aria-label={enabled ? "Mute voice reader" : "Enable voice reader"}
             className={`relative w-14 h-14 rounded-[1.25rem] flex items-center justify-center shadow-2xl transition-all duration-500 ${
               enabled 
                 ? "bg-gradient-to-br from-[#0D9488] to-[#0EA5E9] text-white ring-4 ring-teal-500/20"
@@ -486,7 +471,11 @@ export function VoiceAccessibility() {
               />
             )}
             
-            <Volume2 className={`w-7 h-7 transition-all duration-300 ${enabled ? 'scale-110 drop-shadow-md' : 'scale-90 opacity-60'}`} />
+            {enabled ? (
+              <Volume2 className="w-7 h-7 scale-110 drop-shadow-md transition-all duration-300 text-white" />
+            ) : (
+              <VolumeX className="w-7 h-7 scale-90 opacity-60 transition-all duration-300" />
+            )}
             
             {/* Indicator Dot */}
             <div className={`absolute top-2 right-2 w-2.5 h-2.5 rounded-full border-2 border-white dark:border-gray-900 transition-all duration-300 ${enabled ? 'bg-green-400' : 'bg-gray-300'}`} />
